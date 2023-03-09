@@ -46,11 +46,14 @@ public class PlayerNetwork : NetworkBehaviour
 
         if(Input.GetKeyDown(KeyCode.T))
         {
+            TestServerRpc(new ServerRpcParams());
+            /*
             randomNumber.Value = new MyCustomData {
                 _int = 10,
                 _bool = false,
                 message = "Kowabunga!",
             };
+            */
         }
 
         Vector3 moveDir = new Vector3(0,0);
@@ -63,4 +66,11 @@ public class PlayerNetwork : NetworkBehaviour
         transform.position += moveDir * moveSpeed * Time.deltaTime;
         unitPosition.Value = moveDir * moveSpeed * Time.deltaTime;
     }
+
+    [ServerRpc]
+    private void TestServerRpc(ServerRpcParams serverRpcParams) {
+        Debug.Log("TestSErverRpc" + OwnerClientId + "; " + serverRpcParams.Receive.SenderClientId); 
+    }
+
 }
+
