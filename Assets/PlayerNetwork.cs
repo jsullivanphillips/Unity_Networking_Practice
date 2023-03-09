@@ -7,7 +7,8 @@ using UnityEngine;
 public class PlayerNetwork : NetworkBehaviour
 {
 
-     
+    NetworkVariable<Vector3> unitPosition = new NetworkVariable<Vector3>(new Vector3(0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
     NetworkVariable<MyCustomData> randomNumber = new NetworkVariable<MyCustomData>(
        new MyCustomData{
             _int = 56,
@@ -30,6 +31,10 @@ public class PlayerNetwork : NetworkBehaviour
     {
         randomNumber.OnValueChanged += (MyCustomData previousValue, MyCustomData newValue) => {
             Debug.Log(OwnerClientId + "; " + newValue._int + "; " + newValue._bool + "; " + newValue.message);
+        };
+
+        unitPosition.OnValueChanged += (Vector3 previousValue, Vector3 newValue) => {
+            transform.position += newValue;
         };
     }
 
@@ -56,5 +61,6 @@ public class PlayerNetwork : NetworkBehaviour
 
         float moveSpeed = 3f;
         transform.position += moveDir * moveSpeed * Time.deltaTime;
+        unitPosition.Value = moveDir * moveSpeed * Time.deltaTime;
     }
 }
