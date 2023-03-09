@@ -7,6 +7,10 @@ using UnityEngine;
 public class PlayerNetwork : NetworkBehaviour
 {
 
+    [SerializeField] Transform spawnedObjectPrefab;
+
+    Transform spawnedObjectTransform;
+
     NetworkVariable<Vector3> unitPosition = new NetworkVariable<Vector3>(new Vector3(0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     NetworkVariable<MyCustomData> randomNumber = new NetworkVariable<MyCustomData>(
@@ -46,8 +50,10 @@ public class PlayerNetwork : NetworkBehaviour
 
         if(Input.GetKeyDown(KeyCode.T))
         {
+            spawnedObjectTransform = Instantiate(spawnedObjectPrefab);
+            spawnedObjectTransform.GetComponent<NetworkObject>().Spawn(true);
             //TestServerRpc(new ServerRpcParams());
-            TestClientRpc(new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong> { 1 }}});
+            //TestClientRpc(new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong> { 1 }}});
             /*
             randomNumber.Value = new MyCustomData {
                 _int = 10,
@@ -55,6 +61,11 @@ public class PlayerNetwork : NetworkBehaviour
                 message = "Kowabunga!",
             };
             */
+        }
+
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            Destroy(spawnedObjectTransform.gameObject);
         }
 
         Vector3 moveDir = new Vector3(0,0);
