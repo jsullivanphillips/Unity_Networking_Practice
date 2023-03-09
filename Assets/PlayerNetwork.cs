@@ -46,7 +46,8 @@ public class PlayerNetwork : NetworkBehaviour
 
         if(Input.GetKeyDown(KeyCode.T))
         {
-            TestServerRpc(new ServerRpcParams());
+            //TestServerRpc(new ServerRpcParams());
+            TestClientRpc();
             /*
             randomNumber.Value = new MyCustomData {
                 _int = 10,
@@ -70,6 +71,11 @@ public class PlayerNetwork : NetworkBehaviour
     [ServerRpc]
     private void TestServerRpc(ServerRpcParams serverRpcParams) {
         Debug.Log("TestSErverRpc" + OwnerClientId + "; " + serverRpcParams.Receive.SenderClientId); 
+    }
+
+    [ClientRpc]
+    void TestClientRpc() {
+        Debug.Log("testclient rpc");
     }
 
 }
